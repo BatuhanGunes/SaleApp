@@ -64,11 +64,19 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                     double roundTotalAmount = new BigDecimal(shoppingCartTotalAmount).setScale(
                             2, BigDecimal.ROUND_HALF_UP).doubleValue();
                     textViewTotalAmount.setText(roundTotalAmount + " TL");
+
+                    String msg = "Ürün Eklendi. Eklenen Ürün: \n" + productName + " --> "
+                            + productPrice + " TL\nToplam Fiyat --> " + roundTotalAmount + " Tl";
+                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
                 } else {
                     shoppingCartTotalAmount -= productArrayList.get(position).getProductPrice();
                     double roundTotalAmount = new BigDecimal(shoppingCartTotalAmount).setScale(
                             2, BigDecimal.ROUND_HALF_UP).doubleValue();
                     textViewTotalAmount.setText(roundTotalAmount + " TL");
+
+                    String msg = "Ürün Çıkartıldı. \n" + productName + " --> "
+                            + productPrice + " TL\nToplam Fiyat --> " + roundTotalAmount + " Tl";
+                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
                 }
             }
         });
