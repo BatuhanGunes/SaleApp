@@ -348,7 +348,7 @@ public class ProductUpdate extends JFrame {
 	//Searches according to the ID variable.
 	public void searchByID(int id) {
 		conn = DbConnection.ConnectDB();
-		String query = "SELECT * FROM Products WHERE ID=" + id;
+		String query = "SELECT * FROM Products WHERE Id=" + id;
 		try {	
 			pst = conn.prepareStatement(query);
 			rs = pst.executeQuery();
@@ -366,9 +366,9 @@ public class ProductUpdate extends JFrame {
 				txtProductID.setEnabled(false);
 				
 				// The data read from the database was written to the required places
-				txtProductName.setText(rs.getString("Name"));	
-				txtProductPrice.setText(rs.getString("Price"));
-				vatList.setSelectedItem(rs.getString("Vat"));
+				txtProductName.setText(rs.getString("ProductName"));	
+				txtProductPrice.setText(rs.getString("UnitPrice"));
+				vatList.setSelectedItem(rs.getString("VatRate"));
 				txtProductBarcode.setText(rs.getString("Barcode"));
 				
 				defaultID = Integer.parseInt(txtProductID.getText());
@@ -384,7 +384,7 @@ public class ProductUpdate extends JFrame {
 	//Searches according to the Name variable.
 	public void searchByName(String name) {
 		conn = DbConnection.ConnectDB();
-		String query = "SELECT * FROM Products WHERE Name='" + name + "'";
+		String query = "SELECT * FROM Products WHERE ProductName='" + name + "'";
 		try {
 			pst = conn.prepareStatement(query);
 			rs = pst.executeQuery();
@@ -402,9 +402,9 @@ public class ProductUpdate extends JFrame {
 				txtProductID.setEnabled(true);
 				
 				// The data read from the database was written to the required places
-				txtProductID.setText(rs.getString("ID"));	
-				txtProductPrice.setText(rs.getString("Price"));
-				vatList.setSelectedItem(rs.getString("Vat"));
+				txtProductID.setText(rs.getString("Id"));	
+				txtProductPrice.setText(rs.getString("UnitPrice"));
+				vatList.setSelectedItem(rs.getString("VatRate"));
 				txtProductBarcode.setText(rs.getString("Barcode"));
 				
 				defaultID = Integer.parseInt(txtProductID.getText());
@@ -426,20 +426,20 @@ public class ProductUpdate extends JFrame {
 			if(txtProductBarcode.getText().isEmpty()) {
 				// Saving process when 'Barcode' field is empty
 				query = "UPDATE Products SET "	
-						+ "ID=" + Integer.parseInt(txtProductID.getText()) + ", "
-						+ "Name='" + txtProductName.getText() +"', "
-						+ "Price=" + Double.parseDouble(txtProductPrice.getText()) + ", "
-						+ "Vat=" + Integer.parseInt(vatList.getSelectedItem().toString()) + ", "
-						+ "Barcode=null WHERE ID=" + id;
+						+ "Id=" + Integer.parseInt(txtProductID.getText()) + ", "
+						+ "ProductName='" + txtProductName.getText() +"', "
+						+ "UnitPrice=" + Double.parseDouble(txtProductPrice.getText()) + ", "
+						+ "VatRate=" + Integer.parseInt(vatList.getSelectedItem().toString()) + ", "
+						+ "Barcode=null WHERE Id=" + id;
 			}else if(txtProductBarcode.getText().length() == 13){
 				// Saving process when 'Barcode' field is filled
 				query = "UPDATE Products SET "		
 						+ "ID=" + Integer.parseInt(txtProductID.getText()) + ", "
-						+ "Name='" + txtProductName.getText() + "', "
-						+ "Price=" + Double.parseDouble(txtProductPrice.getText()) + ", "
-						+ "Vat=" + Integer.parseInt(vatList.getSelectedItem().toString()) + ", "
+						+ "ProductName='" + txtProductName.getText() + "', "
+						+ "UnitPrice=" + Double.parseDouble(txtProductPrice.getText()) + ", "
+						+ "VatRate=" + Integer.parseInt(vatList.getSelectedItem().toString()) + ", "
 						+ "Barcode='" + txtProductBarcode.getText()+ "'"
-						+ " WHERE ID=" + id;	
+						+ " WHERE Id=" + id;	
 			}else {
 				JOptionPane.showMessageDialog(null, "'Ürün Barkodu' alanı 0 veya 13 karakter uzunluğunda olmalıdır.\n"
 						+ "Lütfen tekrar deneyiniz.");

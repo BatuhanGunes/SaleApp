@@ -10,33 +10,42 @@ import javax.swing.JOptionPane;
 public class DbConnection {
 
 	Connection conn = null;
+	static String url;
 	
 	public static Connection ConnectDB() {
 		
 		try {
 			
 			Class.forName("org.sqlite.JDBC");
-			String url = "jdbc:sqlite:Products.db"; 	// Connection String
+			url = "jdbc:sqlite:Products.db"; 	// Connection String
 			Connection conn = DriverManager.getConnection(url);
 			System.out.println("Connection to SQLite has been established.");
 			
 			// Creates if the database file is not already created.
-			String sql = "CREATE TABLE IF NOT EXISTS Products (\n"
-	                + "	ID INTEGER NOT NULL,\n"
-	                + "	Name TEXT NOT NULL,\n"
-	                + "	Price REAL NOT NULL,\n"
-	                + "	Vat INTEGER NOT NULL,\n"
+			String tableProduct = "CREATE TABLE IF NOT EXISTS Products (\n"
+	                + "	Id INTEGER NOT NULL,\n"
+	                + "	ProductName TEXT NOT NULL,\n"
+	                + "	UnitPrice REAL NOT NULL,\n"
+	                + "	VatRate INTEGER NOT NULL,\n"
 	                + "	Barcode TEXT\n"
 	                + ");";
 			
-			try (Connection conn1 = DriverManager.getConnection(url);
-	                Statement stmt = conn1.createStatement()) {
-	            // create a new table
-	            stmt.execute(sql);
+			String tableSales = "CREATE TABLE IF NOT EXISTS Sales (\n"
+	                + "	ReceiptCount INTEGER NOT NULL,\n"
+	                + "	TotalAmount REAL NOT NULL,\n"
+	                + "	CashPayment REAL NOT NULL,\n"
+	                + "	CreditPayment REAL NOT NULL\n"
+	                + ");";
+			
+			String tableSalesDetails = "CREATE TABLE IF NOT EXISTS SalesDetails (\n"
+	                + "	ProductId INTEGER NOT NULL,\n"
+	                + "	ProductName TEXT NOT NULL,\n"
+	                + "	Amount REAL NOT NULL\n"
+	                + ");";
 
-	        } catch (SQLException e) {
-	            System.out.println(e.getMessage());
-	        }
+			createTable(tableProduct);
+			createTable(tableSales);
+			createTable(tableSalesDetails);
 			
 			return conn;
 			
@@ -45,6 +54,16 @@ public class DbConnection {
 			JOptionPane.showMessageDialog(null, e);
 			return null;
 		}
+	}
+	
+	public static void createTable(String tableName) {
+		try (Connection conn = DriverManager.getConnection(url);
+                Statement stmt = conn.createStatement()) {
+            // create a new table
+            stmt.execute(tableName);
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
 	}
 	
 }

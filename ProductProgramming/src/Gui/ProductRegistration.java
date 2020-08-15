@@ -279,7 +279,7 @@ public class ProductRegistration extends JFrame {
 	public void sameProductIdControl(int id) {
 		conn = DbConnection.ConnectDB();
 		
-		String query = "SELECT * FROM Products WHERE ID=" + id;
+		String query = "SELECT * FROM Products WHERE Id=" + id;
 		try {
 			pst = conn.prepareStatement(query);
 			rs = pst.executeQuery();
@@ -304,7 +304,7 @@ public class ProductRegistration extends JFrame {
 			conn = DbConnection.ConnectDB();
 			
 			// Barcode field is assigned null because 'Barcode' field is empty
-			String query = "INSERT INTO Products(ID, Name, Price, Vat, Barcode) VALUES (?,?,?,?,null)";
+			String query = "INSERT INTO Products(Id, ProductName, UnitPrice, VatRate, Barcode) VALUES (?,?,?,?,null)";
 			try {
 				pst = conn.prepareStatement(query);
 				pst.setInt(1, Integer.parseInt(txtProductID.getText()));
@@ -323,7 +323,7 @@ public class ProductRegistration extends JFrame {
 				
 		}else if(txtProductBarcode.getText().length() == 13) {
 			// Saving process when 'Barcode' field is filled
-			String query = "INSERT INTO Products(ID, Name, Price, Vat, Barcode) VALUES (?,?,?,?,?)";
+			String query = "INSERT INTO Products(ID, ProductName, UnitPrice, VatRate, Barcode) VALUES (?,?,?,?,?)";
 			try {
 				pst = conn.prepareStatement(query);
 				pst.setInt(1, Integer.parseInt(txtProductID.getText()));

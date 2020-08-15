@@ -125,7 +125,7 @@ public class Reporting extends JFrame {
 	// Creating Json format and printing it on the screen
 	public void createReport() {		
 		conn = DbConnection.ConnectDB();
-		String query = "SELECT *FROM Products";
+		String query = "SELECT *FROM Products ORDER BY Id ASC";
 		
 		try {	
 			pst = conn.prepareStatement(query);
@@ -138,10 +138,10 @@ public class Reporting extends JFrame {
 				Product product = new Product();
 				
 				// Parsing data read from the database
-				product.ID = rs.getInt("ID");
-				product.name = rs.getString("Name");
-				product.price = rs.getDouble("Price");
-				product.vat = rs.getInt("Vat");
+				product.ID = rs.getInt("Id");
+				product.name = rs.getString("ProductName");
+				product.price = rs.getDouble("UnitPrice");
+				product.vat = rs.getInt("VatRate");
 				product.barcode = rs.getString("Barcode");
 				
 				// Addition to arraylist
