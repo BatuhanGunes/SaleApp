@@ -2,9 +2,9 @@ package com.example.saleclient;
 
 public class Product {
     String productName;
-    String productPrice;
+    double productPrice;
 
-    public Product(String productName, String productPrice) {
+    public Product(String productName, double productPrice) {
         this.productName = productName;
         this.productPrice = productPrice;
     }
@@ -13,15 +13,8 @@ public class Product {
         return productName;
     }
 
-    public void setProductName(String productName) {
-        this.productName = productName;
-    }
-
-    public String getProductPrice() {
+    public double getProductPrice() {
         return productPrice;
     }
 
-    public void setProductPrice(String productPrice) {
-        this.productPrice = productPrice;
-    }
 }

@@ -3,4 +3,7 @@
     <string name="back">Geri</string>
     <string name="cash">Nakit</string>
     <string name="credit">Kredi</string>
+    <string name="Sum">Toplam Tutar :</string>
+    <string name="Amount">0.0 TL</string>
+    <string name="sell">Satış</string>
 </resources>
