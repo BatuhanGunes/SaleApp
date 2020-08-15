@@ -1,3 +1,4 @@
 <resources>
     <string name="app_name">SaleClient</string>
+    <string name="connect">Bağlan</string>
 </resources>
