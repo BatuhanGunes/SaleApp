@@ -7,16 +7,36 @@ import java.awt.Toolkit;
 
 import javax.swing.JFrame;
 import javax.swing.JLabel;
+import javax.swing.JOptionPane;
 import javax.swing.JPanel;
 import javax.swing.border.EmptyBorder;
+
+import com.google.gson.Gson;
+import com.google.gson.GsonBuilder;
+
+import Gui.Reporting.Product;
+import Gui.Reporting.Products;
+import Model.DbConnection;
+
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.util.ArrayList;
 import java.awt.event.ActionEvent;
 
 public class MainPage extends JFrame {
 
 	private static final long serialVersionUID = 1L;
 	private JPanel contentPane;
+	
+	//SQLite parameters
+	Connection conn = null;
+	PreparedStatement pst = null;
+	ResultSet rs = null;
+	
 
 	/**
 	 * Launch the application.
@@ -105,5 +125,168 @@ public class MainPage extends JFrame {
 		});
 		btnExit.setBounds(150, 220, 150, 23);
 		contentPane.add(btnExit);
+		
+		connectToClient();
+	}
+	
+	public void connectToClient() {
+		int msgNo = 0;
+		chooseMessageType(msgNo);
+		
+	}
+	
+	public void chooseMessageType(int msgNo) {
+		switch (msgNo) {
+		case 0: {
+			// Upload product data to the client.
+			uploadProduct();
+			break;
+		}
+		case 1:{
+			// Download the saleDetails data from the client.
+			downloadSaleDetails(1,"Deneme",1,1.0);
+			break;
+		}
+		case 2:{
+			// Save sale data from client in database
+			insertSale(1,1,1,1);
+			break;
+		}
+		case 3:{
+			// Save sale data from client in database
+			uploadSale(10,10,10,10);
+			break;
+		}
+		default:
+			throw new IllegalArgumentException("Unexpected value: " + msgNo);
+		}
+	}
+	
+	// A class to save data read from the database
+	public class Product{
+		public String ProductName = null;
+		public double UnitPrice = 0.0;
+		public int VatRate = 0;
+	}
+		
+	// Converting the recorded data to arraylist format
+	public class Products{
+		ArrayList<Product> products = new ArrayList<Product>();
+	}
+		
+	public void uploadProduct () {
+		conn = DbConnection.ConnectDB();
+		
+		String query = "SELECT ProductName, UnitPrice, VatRate FROM Products";
+		
+		try {
+			pst = conn.prepareStatement(query);
+			rs = pst.executeQuery();
+			
+			//Checks if there is an active recording.
+			if(rs.isClosed()) {
+				JOptionPane.showMessageDialog(null, "Kayıt Bulunamadı. Lütfen Tekrar Deneyiniz.");
+			}else {
+				
+				Products productsToConvert = new Products();
+				
+				while (rs.next()) {
+					
+					Product product = new Product();
+					
+					// Parsing data read from the database
+					product.ProductName = rs.getString("ProductName");
+					product.UnitPrice = rs.getDouble("UnitPrice");
+					product.VatRate = rs.getInt("VatRate");
+					
+					// Addition to arraylist
+					productsToConvert.products.add(product);
+					
+					// Creates the JSON format.
+					Gson gson = new GsonBuilder().setPrettyPrinting().create();
+					String jsonProduct = gson.toJson(productsToConvert);
+				}
+			}
+			closeDB();
+		} catch (Exception e) {
+			// handle exception
+			JOptionPane.showMessageDialog(null, e);	
+		}
+	}
+	
+	public void downloadSaleDetails (int productId, String productName, int quantity, double amount) {
+		conn = DbConnection.ConnectDB();
+
+		String query = "INSERT INTO SaleDetails(ProductId, ProductName, Quantity, Amount) VALUES (?,?,?,?)";
+		
+		try {
+			pst = conn.prepareStatement(query);
+			pst.setInt(1, productId);
+			pst.setString(2, productName);
+			pst.setInt(3, quantity);
+			pst.setDouble(4, amount);
+			pst.execute();
+
+			closeDB();
+			JOptionPane.showMessageDialog(null, "Satış detayları Eklendi.");
+		}catch (Exception e) {
+			// handle exception
+			JOptionPane.showMessageDialog(null, e);	
+		}
+	}
+	
+	public void insertSale(int receiptCount, double totalAmount, double cashPayment, double creditPayment) {
+		conn = DbConnection.ConnectDB();
+
+		String query = "INSERT INTO Sale(ReceiptCount, TotalAmount, CashPayment, CreditPayment) VALUES (?,?,?,?)";
+		
+		try {
+			pst = conn.prepareStatement(query);
+			pst.setInt(1, receiptCount);
+			pst.setDouble(2, totalAmount);
+			pst.setDouble(3, cashPayment);
+			pst.setDouble(4, creditPayment);
+			pst.execute();
+
+			closeDB();
+			JOptionPane.showMessageDialog(null, "Satış Eklendi.");
+		}catch (Exception e) {
+			// handle exception
+			JOptionPane.showMessageDialog(null, e);	
+		}
+	}
+	
+	public void uploadSale(int receiptCount, double totalAmount, double cashPayment, double creditPayment) {
+		conn = DbConnection.ConnectDB();
+		
+		String query = "UPDATE Sale SET "	
+				+ "ReceiptCount=" + receiptCount + ", "
+				+ "TotalAmount='" + totalAmount +"', "
+				+ "CashPayment=" + cashPayment + ", "
+				+ "CreditPayment=" + creditPayment 
+				+ " WHERE Id=(SELECT max(Id) FROM Sale)";
+		
+		try {
+			pst = conn.prepareStatement(query);
+			pst.executeUpdate();
+			
+			closeDB();
+			JOptionPane.showMessageDialog(null, "Satış güncelleştirildi.");
+		} catch (Exception e) {
+			// handle exception
+			JOptionPane.showMessageDialog(null, e);	
+		}
+	}
+	
+	public void closeDB() {	
+		try {
+			//close DB
+			pst.close();	// PreparedStatement closed
+			conn.close();	// Connection closed
+			System.out.println("Disconnected from SQLite.");
+		} catch (SQLException e) {
+			// Auto-generated catch block
+			e.printStackTrace();
+		}
 	}
 }

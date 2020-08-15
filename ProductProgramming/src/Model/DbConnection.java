@@ -10,7 +10,7 @@ import javax.swing.JOptionPane;
 public class DbConnection {
 
 	Connection conn = null;
-	static String url;
+	public static String url;
 	
 	public static Connection ConnectDB() {
 		
@@ -30,16 +30,18 @@ public class DbConnection {
 	                + "	Barcode TEXT\n"
 	                + ");";
 			
-			String tableSales = "CREATE TABLE IF NOT EXISTS Sales (\n"
+			String tableSales = "CREATE TABLE IF NOT EXISTS Sale (\n"
+					+ " Id INTEGER NOT NULL PRIMARY KEY,\n"
 	                + "	ReceiptCount INTEGER NOT NULL,\n"
 	                + "	TotalAmount REAL NOT NULL,\n"
 	                + "	CashPayment REAL NOT NULL,\n"
 	                + "	CreditPayment REAL NOT NULL\n"
 	                + ");";
 			
-			String tableSalesDetails = "CREATE TABLE IF NOT EXISTS SalesDetails (\n"
+			String tableSalesDetails = "CREATE TABLE IF NOT EXISTS SaleDetails (\n"
 	                + "	ProductId INTEGER NOT NULL,\n"
 	                + "	ProductName TEXT NOT NULL,\n"
+	                + "	Quantity INTEGER NOT NULL,\n"
 	                + "	Amount REAL NOT NULL\n"
 	                + ");";
 
