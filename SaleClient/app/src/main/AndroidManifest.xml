@@ -17,6 +17,8 @@
         </activity>
 
         <activity android:name=".SalesActivity"></activity>
+        <activity android:name=".SynchronizeActivity" />
+
     </application>
 
 </manifest>

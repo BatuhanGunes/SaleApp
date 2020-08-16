@@ -6,4 +6,8 @@
     <string name="Sum">Ara Toplam :</string>
     <string name="Amount">0.0 TL</string>
     <string name="sell">Satış</string>
+    <string name="buyProducts">Ürünleri Al</string>
+    <string name="sendSales">Satışları Gönder</string>
+    <string name="sellProduct">Satış Yap</string>
+    <string name="connect">Bağlan</string>
 </resources>
