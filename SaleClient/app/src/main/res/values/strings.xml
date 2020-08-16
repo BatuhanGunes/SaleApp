@@ -1,4 +1,7 @@
 <resources>
     <string name="app_name">SaleClient</string>
+    <string name="buyProducts">Ürünleri Al</string>
+    <string name="sendSales">Satışları Gönder</string>
+    <string name="sellProduct">Satış Yap</string>
     <string name="connect">Bağlan</string>
 </resources>
