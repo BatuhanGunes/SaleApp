@@ -10,4 +10,8 @@
     <string name="sendSales">Satışları Gönder</string>
     <string name="sellProduct">Satış Yap</string>
     <string name="connect">Bağlan</string>
+    <string name="welcome">Hoşgeldiniz</string>
+    <string name="IP">IP :</string>
+    <string name="PORT">PORT :</string>
+    <string name="Synchronize">Senkronize Et</string>
 </resources>
