@@ -19,11 +19,11 @@
             android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/Synchronize"
             android:textSize="30sp"
             android:textStyle="bold"
             tools:layout_editor_absoluteX="75dp"
-            tools:layout_editor_absoluteY="8dp"
-            tools:text="Senkronize Et" />
+            tools:layout_editor_absoluteY="8dp" />
     </androidx.appcompat.widget.Toolbar>
 
     <Button
@@ -42,9 +42,7 @@
         android:layout_width="300dp"
         android:layout_height="0dp"
         android:layout_marginTop="32dp"
-        android:layout_marginBottom="33dp"
         android:text="@string/sendSales"
-        app:layout_constraintBottom_toTopOf="@+id/buttonSellProduct"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
         app:layout_constraintStart_toStartOf="parent"
@@ -54,10 +52,10 @@
         android:id="@+id/buttonSellProduct"
         android:layout_width="300dp"
         android:layout_height="wrap_content"
-        android:layout_marginBottom="366dp"
+        android:layout_marginTop="32dp"
         android:text="@string/sellProduct"
-        app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.5"
-        app:layout_constraintStart_toStartOf="parent" />
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/buttonSendSales" />
 </androidx.constraintlayout.widget.ConstraintLayout>

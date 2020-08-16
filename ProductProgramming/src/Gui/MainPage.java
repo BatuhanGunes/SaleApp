@@ -20,6 +20,12 @@ import Model.DbConnection;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,11 +39,21 @@ public class MainPage extends JFrame {
 	private JPanel contentPane;
 	
 	//SQLite parameters
-	Connection conn = null;
-	PreparedStatement pst = null;
-	ResultSet rs = null;
+	static Connection conn = null;
+	static PreparedStatement pst = null;
+	static ResultSet rs = null;
 	
-
+	// Message sender parameters
+	static Socket socket;
+	static ServerSocket serverSocket;
+	static InputStreamReader inputStreamReader;
+	static BufferedReader bufferedReader;
+	static PrintWriter printWriter;
+	static String message;
+	static String jsonMsg;
+	static int portAddress = 7800;
+	static String ipAddress = "10.0.2.16";
+	
 	/**
 	 * Launch the application.
 	 */
@@ -52,6 +68,26 @@ public class MainPage extends JFrame {
 				}
 			}
 		});
+		
+		try {
+			serverSocket = new ServerSocket(portAddress);
+			while(true) {
+				socket = serverSocket.accept();
+				inputStreamReader = new InputStreamReader(socket.getInputStream());
+				bufferedReader = new BufferedReader(inputStreamReader);
+				message = bufferedReader.readLine();
+				System.out.println(message);
+				
+				String[] msg = message.split("-");
+				String massegeType = msg[0];
+				jsonMsg = msg[1];
+				
+				chooseMessageType(massegeType);
+			}
+		}catch (Exception e) {
+			// handle exception
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -126,70 +162,102 @@ public class MainPage extends JFrame {
 		btnExit.setBounds(150, 220, 150, 23);
 		contentPane.add(btnExit);
 		
-		connectToClient();
-	}
-	
-	public void connectToClient() {
-		int msgNo = 0;
-		chooseMessageType(msgNo);
+		JLabel lblIpAddressTitle = new JLabel("Bağlanılan Ip:");
+		lblIpAddressTitle.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblIpAddressTitle.setBounds(10, 260, 130, 25);
+		contentPane.add(lblIpAddressTitle);
 		
+		JLabel lblConnectPortTitle = new JLabel("Bağlanılan Port:");
+		lblConnectPortTitle.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblConnectPortTitle.setBounds(10, 280, 130, 25);
+		contentPane.add(lblConnectPortTitle);
+		
+		JLabel lblUsedPortTitle = new JLabel("Kullanılan Port:");
+		lblUsedPortTitle.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblUsedPortTitle.setBounds(10, 300, 130, 25);
+		contentPane.add(lblUsedPortTitle);
+		
+		JLabel lblIpAddress = new JLabel("");
+		lblIpAddress.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblIpAddress.setBounds(150, 260, 228, 25);
+		contentPane.add(lblIpAddress);
+		lblIpAddress.setText(ipAddress);
+		
+		JLabel lblConnectPort = new JLabel("");
+		lblConnectPort.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblConnectPort.setBounds(150, 280, 228, 25);
+		contentPane.add(lblConnectPort);
+		lblConnectPort.setText(String.valueOf(portAddress+1));
+		
+		
+		JLabel lblUsedPort = new JLabel("");
+		lblUsedPort.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblUsedPort.setBounds(150, 300, 228, 25);
+		contentPane.add(lblUsedPort);
+		lblUsedPort.setText(String.valueOf(portAddress));
 	}
 	
-	public void chooseMessageType(int msgNo) {
-		switch (msgNo) {
-		case 0: {
+	public static void chooseMessageType(String msgType) {
+		switch (msgType) {
+		case "getProduct": {
 			// Upload product data to the client.
 			uploadProduct();
 			break;
 		}
-		case 1:{
+		case "saleDetails":{
 			// Download the saleDetails data from the client.
-			downloadSaleDetails(1,"Deneme",1,1.0);
+			try {
+                downloadSaleDetails(Integer.parseInt(jsonMsg.substring(0)), Double.parseDouble(jsonMsg.substring(1)), 
+    					Double.parseDouble(jsonMsg.substring(2)), Double.parseDouble(jsonMsg.substring(3)));
+            } catch (Throwable e) {
+            	JOptionPane.showMessageDialog(null, e);	
+            }
+			
 			break;
 		}
-		case 2:{
+		case "Deneme1":{
 			// Save sale data from client in database
 			insertSale(1,1,1,1);
 			break;
 		}
-		case 3:{
+		case "Deneme2":{
 			// Save sale data from client in database
 			uploadSale(10,10,10,10);
 			break;
 		}
 		default:
-			throw new IllegalArgumentException("Unexpected value: " + msgNo);
+			throw new IllegalArgumentException("Unexpected value: " + msgType);
 		}
 	}
 	
 	// A class to save data read from the database
-	public class Product{
+	public static class Product{
 		public String ProductName = null;
 		public double UnitPrice = 0.0;
 		public int VatRate = 0;
 	}
-		
+	
 	// Converting the recorded data to arraylist format
-	public class Products{
-		ArrayList<Product> products = new ArrayList<Product>();
-	}
+		public static class Products{
+			ArrayList<Product> products = new ArrayList<Product>();
+		}
 		
-	public void uploadProduct () {
+	// Creating Json format and send client
+	public static void uploadProduct () {
 		conn = DbConnection.ConnectDB();
-		
 		String query = "SELECT ProductName, UnitPrice, VatRate FROM Products";
 		
 		try {
 			pst = conn.prepareStatement(query);
 			rs = pst.executeQuery();
 			
+			Products productsToConvert = new Products();
+			
 			//Checks if there is an active recording.
 			if(rs.isClosed()) {
 				JOptionPane.showMessageDialog(null, "Kayıt Bulunamadı. Lütfen Tekrar Deneyiniz.");
 			}else {
-				
-				Products productsToConvert = new Products();
-				
+
 				while (rs.next()) {
 					
 					Product product = new Product();
@@ -198,13 +266,26 @@ public class MainPage extends JFrame {
 					product.ProductName = rs.getString("ProductName");
 					product.UnitPrice = rs.getDouble("UnitPrice");
 					product.VatRate = rs.getInt("VatRate");
-					
+
 					// Addition to arraylist
 					productsToConvert.products.add(product);
-					
-					// Creates the JSON format.
-					Gson gson = new GsonBuilder().setPrettyPrinting().create();
-					String jsonProduct = gson.toJson(productsToConvert);
+				}
+				
+				// Creates the JSON format.
+				Gson gson = new GsonBuilder().create();
+				String json = gson.toJson(productsToConvert);
+				System.out.print(json);
+				
+				try {
+					socket = new Socket(ipAddress, (portAddress+1));
+					printWriter = new PrintWriter(socket.getOutputStream());
+					printWriter.write(json);
+					printWriter.flush();
+					printWriter.close();
+					socket.close();
+				}catch (IOException e) {
+					// handle exception
+					e.printStackTrace();
 				}
 			}
 			closeDB();
@@ -214,17 +295,17 @@ public class MainPage extends JFrame {
 		}
 	}
 	
-	public void downloadSaleDetails (int productId, String productName, int quantity, double amount) {
+	public static void downloadSaleDetails (int receiptCount, double totalAmount, double cashPayment, double creditPayment) {
 		conn = DbConnection.ConnectDB();
 
-		String query = "INSERT INTO SaleDetails(ProductId, ProductName, Quantity, Amount) VALUES (?,?,?,?)";
+		String query = "INSERT INTO Sale(ReceiptCount, TotalAmount, CashPayment, CreditPayment) VALUES (?,?,?,?)";
 		
 		try {
 			pst = conn.prepareStatement(query);
-			pst.setInt(1, productId);
-			pst.setString(2, productName);
-			pst.setInt(3, quantity);
-			pst.setDouble(4, amount);
+			pst.setInt(1, receiptCount);
+			pst.setDouble(2, totalAmount);
+			pst.setDouble(3, cashPayment);
+			pst.setDouble(4, creditPayment);
 			pst.execute();
 
 			closeDB();
@@ -235,7 +316,7 @@ public class MainPage extends JFrame {
 		}
 	}
 	
-	public void insertSale(int receiptCount, double totalAmount, double cashPayment, double creditPayment) {
+	public static void insertSale(int receiptCount, double totalAmount, double cashPayment, double creditPayment) {
 		conn = DbConnection.ConnectDB();
 
 		String query = "INSERT INTO Sale(ReceiptCount, TotalAmount, CashPayment, CreditPayment) VALUES (?,?,?,?)";
@@ -256,7 +337,7 @@ public class MainPage extends JFrame {
 		}
 	}
 	
-	public void uploadSale(int receiptCount, double totalAmount, double cashPayment, double creditPayment) {
+	public static void uploadSale(int receiptCount, double totalAmount, double cashPayment, double creditPayment) {
 		conn = DbConnection.ConnectDB();
 		
 		String query = "UPDATE Sale SET "	
@@ -278,7 +359,7 @@ public class MainPage extends JFrame {
 		}
 	}
 	
-	public void closeDB() {	
+	public static void closeDB() {	
 		try {
 			//close DB
 			pst.close();	// PreparedStatement closed

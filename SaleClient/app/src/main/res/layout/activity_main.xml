@@ -13,22 +13,22 @@
         android:layout_marginStart="24dp"
         android:layout_marginLeft="24dp"
         android:layout_marginTop="60dp"
+        android:text="@string/IP"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/toolbar"
-        tools:text="IP :" />
+        app:layout_constraintTop_toBottomOf="@+id/toolbar" />
 
     <TextView
         android:id="@+id/textViewPort"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="24dp"
+        android:text="@string/PORT"
         android:textSize="30sp"
         android:textStyle="bold"
         app:layout_constraintStart_toStartOf="@+id/textViewIP"
-        app:layout_constraintTop_toBottomOf="@+id/textViewIP"
-        tools:text="PORT :" />
+        app:layout_constraintTop_toBottomOf="@+id/textViewIP" />
 
     <androidx.appcompat.widget.Toolbar
         android:id="@+id/toolbar"
@@ -44,11 +44,12 @@
             android:id="@+id/textViewTitle"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:text="@string/welcome"
             android:textSize="30sp"
             android:textStyle="bold"
             tools:layout_editor_absoluteX="75dp"
-            tools:layout_editor_absoluteY="8dp"
-            tools:text="Hoşgeldiniz" />
+            tools:layout_editor_absoluteY="8dp" />
+
     </androidx.appcompat.widget.Toolbar>
 
     <Button
@@ -73,6 +74,7 @@
         android:autofillHints=""
         android:ems="10"
         android:inputType="textPersonName"
+        android:text="@string/ipAddress"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@+id/textViewIP"
         app:layout_constraintTop_toBottomOf="@+id/toolbar"
@@ -86,6 +88,7 @@
         android:autofillHints=""
         android:ems="10"
         android:inputType="textPersonName"
+        android:text="@string/PortAdress"
         app:layout_constraintEnd_toEndOf="@+id/editTextIP"
         app:layout_constraintStart_toStartOf="@+id/editTextIP"
         app:layout_constraintTop_toBottomOf="@+id/editTextIP"
