@@ -1,0 +1,5 @@
+Gui\MainPage.class
+Gui\Reporting.class
+Model\DbConnection.class
+Gui\ProductRegistration.class
+Gui\ProductUpdate.class
