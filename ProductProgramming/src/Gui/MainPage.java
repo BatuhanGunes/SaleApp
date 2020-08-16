@@ -50,9 +50,10 @@ public class MainPage extends JFrame {
 	static BufferedReader bufferedReader;
 	static PrintWriter printWriter;
 	static String message;
-	static String parameter1, parameter2, parameter3, parameter4;
+	static String jsonMsg;
+	static int portAddress = 7800;
+	static String ipAddress = "10.0.2.16";
 	
-
 	/**
 	 * Launch the application.
 	 */
@@ -68,9 +69,8 @@ public class MainPage extends JFrame {
 			}
 		});
 		
-		chooseMessageType("downloadProducts");
 		try {
-			serverSocket = new ServerSocket(7800);
+			serverSocket = new ServerSocket(portAddress);
 			while(true) {
 				socket = serverSocket.accept();
 				inputStreamReader = new InputStreamReader(socket.getInputStream());
@@ -78,12 +78,9 @@ public class MainPage extends JFrame {
 				message = bufferedReader.readLine();
 				System.out.println(message);
 				
-				String[] massageParts = message.split("-");
-				String massegeType = massageParts[0];
-				parameter1 = massageParts[1];
-				parameter2 = massageParts[2];
-				parameter3 = massageParts[3];
-				parameter4 = massageParts[4];
+				String[] msg = message.split("-");
+				String massegeType = msg[0];
+				jsonMsg = msg[1];
 				
 				chooseMessageType(massegeType);
 			}
@@ -164,19 +161,58 @@ public class MainPage extends JFrame {
 		});
 		btnExit.setBounds(150, 220, 150, 23);
 		contentPane.add(btnExit);
+		
+		JLabel lblIpAddressTitle = new JLabel("Bağlanılan Ip:");
+		lblIpAddressTitle.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblIpAddressTitle.setBounds(10, 260, 130, 25);
+		contentPane.add(lblIpAddressTitle);
+		
+		JLabel lblConnectPortTitle = new JLabel("Bağlanılan Port:");
+		lblConnectPortTitle.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblConnectPortTitle.setBounds(10, 280, 130, 25);
+		contentPane.add(lblConnectPortTitle);
+		
+		JLabel lblUsedPortTitle = new JLabel("Kullanılan Port:");
+		lblUsedPortTitle.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblUsedPortTitle.setBounds(10, 300, 130, 25);
+		contentPane.add(lblUsedPortTitle);
+		
+		JLabel lblIpAddress = new JLabel("");
+		lblIpAddress.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblIpAddress.setBounds(150, 260, 228, 25);
+		contentPane.add(lblIpAddress);
+		lblIpAddress.setText(ipAddress);
+		
+		JLabel lblConnectPort = new JLabel("");
+		lblConnectPort.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblConnectPort.setBounds(150, 280, 228, 25);
+		contentPane.add(lblConnectPort);
+		lblConnectPort.setText(String.valueOf(portAddress+1));
+		
+		
+		JLabel lblUsedPort = new JLabel("");
+		lblUsedPort.setFont(new Font("Tahoma", Font.PLAIN, 15));
+		lblUsedPort.setBounds(150, 300, 228, 25);
+		contentPane.add(lblUsedPort);
+		lblUsedPort.setText(String.valueOf(portAddress));
 	}
 	
 	public static void chooseMessageType(String msgType) {
 		switch (msgType) {
-		case "downloadProducts": {
+		case "getProduct": {
 			// Upload product data to the client.
 			uploadProduct();
 			break;
 		}
-		case "uploadSale":{
+		case "saleDetails":{
 			// Download the saleDetails data from the client.
-			downloadSaleDetails(Integer.parseInt(parameter1), parameter2, 
-					Integer.parseInt(parameter3), Double.parseDouble(parameter4));
+			try {
+                downloadSaleDetails(Integer.parseInt(jsonMsg.substring(0)), Double.parseDouble(jsonMsg.substring(1)), 
+    					Double.parseDouble(jsonMsg.substring(2)), Double.parseDouble(jsonMsg.substring(3)));
+            } catch (Throwable e) {
+            	JOptionPane.showMessageDialog(null, e);	
+            }
+			
 			break;
 		}
 		case "Deneme1":{
@@ -241,7 +277,7 @@ public class MainPage extends JFrame {
 				System.out.print(json);
 				
 				try {
-					socket = new Socket("10.0.2.16", 7801);
+					socket = new Socket(ipAddress, (portAddress+1));
 					printWriter = new PrintWriter(socket.getOutputStream());
 					printWriter.write(json);
 					printWriter.flush();
@@ -259,17 +295,17 @@ public class MainPage extends JFrame {
 		}
 	}
 	
-	public static void downloadSaleDetails (int productId, String productName, int quantity, double amount) {
+	public static void downloadSaleDetails (int receiptCount, double totalAmount, double cashPayment, double creditPayment) {
 		conn = DbConnection.ConnectDB();
 
-		String query = "INSERT INTO SaleDetails(ProductId, ProductName, Quantity, Amount) VALUES (?,?,?,?)";
+		String query = "INSERT INTO Sale(ReceiptCount, TotalAmount, CashPayment, CreditPayment) VALUES (?,?,?,?)";
 		
 		try {
 			pst = conn.prepareStatement(query);
-			pst.setInt(1, productId);
-			pst.setString(2, productName);
-			pst.setInt(3, quantity);
-			pst.setDouble(4, amount);
+			pst.setInt(1, receiptCount);
+			pst.setDouble(2, totalAmount);
+			pst.setDouble(3, cashPayment);
+			pst.setDouble(4, creditPayment);
 			pst.execute();
 
 			closeDB();

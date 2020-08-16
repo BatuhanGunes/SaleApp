@@ -3,6 +3,7 @@ package com.example.saleclient;
 import android.app.Activity;
 import android.content.Context;
 import android.icu.number.Precision;
+import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
@@ -21,9 +22,12 @@ import java.util.ArrayList;
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
     ArrayList<Product> productArrayList;
+    ArrayList<String> productNameArrayList;
+    ArrayList<Double> productPriceArrayList;
     LayoutInflater layoutInflater;
     Context context;
     TextView textViewTotalAmount;
+    double roundTotalAmount;
     double shoppingCartTotalAmount = 0;
 
     public ProductAdapter(Context context) {
@@ -48,36 +52,32 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
     @Override
     public void onBindViewHolder(@NonNull ViewHolder holder, int position) {
         holder.textViewProductPrice.setText(Double.toString(productArrayList.get(position).getProductPrice()));
-        holder.checkBoxProductName.setText(productArrayList.get(position).getProductName());
-        holder.checkBoxProductName.setTag(holder);
-        holder.checkBoxProductName.setOnClickListener(new View.OnClickListener() {
+        holder.textViewProductName.setText(productArrayList.get(position).getProductName());
+        textViewTotalAmount = ((Activity) context).findViewById(R.id.textViewTotalAmount);
+        holder.linearLayout.setTag(holder);
+        holder.linearLayout.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 ViewHolder holder = (ViewHolder) view.getTag();
                 int position = holder.getAdapterPosition();
                 String productName = productArrayList.get(position).getProductName();
                 double productPrice = productArrayList.get(position).getProductPrice();
-                textViewTotalAmount = (TextView) ((Activity) context).findViewById(R.id.textViewTotalAmount);
 
-                if (holder.checkBoxProductName.isChecked()) {
-                    shoppingCartTotalAmount += productArrayList.get(position).getProductPrice();
-                    double roundTotalAmount = new BigDecimal(shoppingCartTotalAmount).setScale(
-                            2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                    textViewTotalAmount.setText(roundTotalAmount + " TL");
+                productNameArrayList = new ArrayList<>();
+                productNameArrayList.add(productName);
 
-                    String msg = "Ürün Eklendi. Eklenen Ürün: \n" + productName + " --> "
-                            + productPrice + " TL\nToplam Fiyat --> " + roundTotalAmount + " Tl";
-                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-                } else {
-                    shoppingCartTotalAmount -= productArrayList.get(position).getProductPrice();
-                    double roundTotalAmount = new BigDecimal(shoppingCartTotalAmount).setScale(
-                            2, BigDecimal.ROUND_HALF_UP).doubleValue();
-                    textViewTotalAmount.setText(roundTotalAmount + " TL");
+                productPriceArrayList = new ArrayList<>();
+                productPriceArrayList.add(productPrice);
 
-                    String msg = "Ürün Çıkartıldı. \n" + productName + " --> "
-                            + productPrice + " TL\nToplam Fiyat --> " + roundTotalAmount + " Tl";
-                    Toast.makeText(context, msg, Toast.LENGTH_SHORT).show();
-                }
+                shoppingCartTotalAmount += productPrice;
+                roundTotalAmount = new BigDecimal(shoppingCartTotalAmount).setScale(
+                        2, BigDecimal.ROUND_HALF_UP).doubleValue();
+                textViewTotalAmount.setText(roundTotalAmount + " TL");
+
+                String msg = "Eklenen Ürün: \n" + productName + " --> " + productPrice
+                        + " TL\nToplam Fiyat --> " + roundTotalAmount + " Tl";
+                Toast toast = Toast.makeText(context, msg, Toast.LENGTH_SHORT);
+                toast.show();
             }
         });
     }
@@ -89,15 +89,20 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
 
     class ViewHolder extends RecyclerView.ViewHolder {
 
-        CheckBox checkBoxProductName;
-        TextView textViewProductPrice, textViewPriceTitle, textViewPriceType;
+        LinearLayout linearLayout;
+        TextView textViewProductName, textViewProductPrice, textViewPriceTitle, textViewPriceType;
 
         public ViewHolder(View itemView) {
             super(itemView);
-            checkBoxProductName = itemView.findViewById(R.id.checkBoxProductName);
+            linearLayout = itemView.findViewById(R.id.layout);
+            textViewProductName = itemView.findViewById(R.id.textViewProductName);
             textViewProductPrice = itemView.findViewById(R.id.textViewProductPrice);
             textViewPriceTitle = itemView.findViewById(R.id.textViewPriceTitle);
             textViewPriceType = itemView.findViewById(R.id.textViewPriceType);
         }
     }
+
+
 }
+
+
