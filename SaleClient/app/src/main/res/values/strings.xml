@@ -1,5 +1,11 @@
 <resources>
     <string name="app_name">SaleClient</string>
+    <string name="back">Geri</string>
+    <string name="cash">Nakit</string>
+    <string name="credit">Kredi</string>
+    <string name="Sum">Ara Toplam :</string>
+    <string name="Amount">0.0 TL</string>
+    <string name="sell">Satış</string>
     <string name="buyProducts">Ürünleri Al</string>
     <string name="sendSales">Satışları Gönder</string>
     <string name="sellProduct">Satış Yap</string>
