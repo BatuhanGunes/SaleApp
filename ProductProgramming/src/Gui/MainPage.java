@@ -20,6 +20,12 @@ import Model.DbConnection;
 
 import javax.swing.JButton;
 import java.awt.event.ActionListener;
+import java.io.BufferedReader;
+import java.io.IOException;
+import java.io.InputStreamReader;
+import java.io.PrintWriter;
+import java.net.ServerSocket;
+import java.net.Socket;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -33,9 +39,18 @@ public class MainPage extends JFrame {
 	private JPanel contentPane;
 	
 	//SQLite parameters
-	Connection conn = null;
-	PreparedStatement pst = null;
-	ResultSet rs = null;
+	static Connection conn = null;
+	static PreparedStatement pst = null;
+	static ResultSet rs = null;
+	
+	// Message sender parameters
+	static Socket socket;
+	static ServerSocket serverSocket;
+	static InputStreamReader inputStreamReader;
+	static BufferedReader bufferedReader;
+	static PrintWriter printWriter;
+	static String message;
+	static String parameter1, parameter2, parameter3, parameter4;
 	
 
 	/**
@@ -52,6 +67,30 @@ public class MainPage extends JFrame {
 				}
 			}
 		});
+		
+		chooseMessageType("downloadProducts");
+		try {
+			serverSocket = new ServerSocket(7800);
+			while(true) {
+				socket = serverSocket.accept();
+				inputStreamReader = new InputStreamReader(socket.getInputStream());
+				bufferedReader = new BufferedReader(inputStreamReader);
+				message = bufferedReader.readLine();
+				System.out.println(message);
+				
+				String[] massageParts = message.split("-");
+				String massegeType = massageParts[0];
+				parameter1 = massageParts[1];
+				parameter2 = massageParts[2];
+				parameter3 = massageParts[3];
+				parameter4 = massageParts[4];
+				
+				chooseMessageType(massegeType);
+			}
+		}catch (Exception e) {
+			// handle exception
+			e.printStackTrace();
+		}
 	}
 
 	/**
@@ -125,71 +164,64 @@ public class MainPage extends JFrame {
 		});
 		btnExit.setBounds(150, 220, 150, 23);
 		contentPane.add(btnExit);
-		
-		connectToClient();
 	}
 	
-	public void connectToClient() {
-		int msgNo = 0;
-		chooseMessageType(msgNo);
-		
-	}
-	
-	public void chooseMessageType(int msgNo) {
-		switch (msgNo) {
-		case 0: {
+	public static void chooseMessageType(String msgType) {
+		switch (msgType) {
+		case "downloadProducts": {
 			// Upload product data to the client.
 			uploadProduct();
 			break;
 		}
-		case 1:{
+		case "uploadSale":{
 			// Download the saleDetails data from the client.
-			downloadSaleDetails(1,"Deneme",1,1.0);
+			downloadSaleDetails(Integer.parseInt(parameter1), parameter2, 
+					Integer.parseInt(parameter3), Double.parseDouble(parameter4));
 			break;
 		}
-		case 2:{
+		case "Deneme1":{
 			// Save sale data from client in database
 			insertSale(1,1,1,1);
 			break;
 		}
-		case 3:{
+		case "Deneme2":{
 			// Save sale data from client in database
 			uploadSale(10,10,10,10);
 			break;
 		}
 		default:
-			throw new IllegalArgumentException("Unexpected value: " + msgNo);
+			throw new IllegalArgumentException("Unexpected value: " + msgType);
 		}
 	}
 	
 	// A class to save data read from the database
-	public class Product{
+	public static class Product{
 		public String ProductName = null;
 		public double UnitPrice = 0.0;
 		public int VatRate = 0;
 	}
-		
+	
 	// Converting the recorded data to arraylist format
-	public class Products{
-		ArrayList<Product> products = new ArrayList<Product>();
-	}
+		public static class Products{
+			ArrayList<Product> products = new ArrayList<Product>();
+		}
 		
-	public void uploadProduct () {
+	// Creating Json format and send client
+	public static void uploadProduct () {
 		conn = DbConnection.ConnectDB();
-		
 		String query = "SELECT ProductName, UnitPrice, VatRate FROM Products";
 		
 		try {
 			pst = conn.prepareStatement(query);
 			rs = pst.executeQuery();
 			
+			Products productsToConvert = new Products();
+			
 			//Checks if there is an active recording.
 			if(rs.isClosed()) {
 				JOptionPane.showMessageDialog(null, "Kayıt Bulunamadı. Lütfen Tekrar Deneyiniz.");
 			}else {
-				
-				Products productsToConvert = new Products();
-				
+
 				while (rs.next()) {
 					
 					Product product = new Product();
@@ -198,13 +230,26 @@ public class MainPage extends JFrame {
 					product.ProductName = rs.getString("ProductName");
 					product.UnitPrice = rs.getDouble("UnitPrice");
 					product.VatRate = rs.getInt("VatRate");
-					
+
 					// Addition to arraylist
 					productsToConvert.products.add(product);
-					
-					// Creates the JSON format.
-					Gson gson = new GsonBuilder().setPrettyPrinting().create();
-					String jsonProduct = gson.toJson(productsToConvert);
+				}
+				
+				// Creates the JSON format.
+				Gson gson = new GsonBuilder().create();
+				String json = gson.toJson(productsToConvert);
+				System.out.print(json);
+				
+				try {
+					socket = new Socket("10.0.2.16", 7801);
+					printWriter = new PrintWriter(socket.getOutputStream());
+					printWriter.write(json);
+					printWriter.flush();
+					printWriter.close();
+					socket.close();
+				}catch (IOException e) {
+					// handle exception
+					e.printStackTrace();
 				}
 			}
 			closeDB();
@@ -214,7 +259,7 @@ public class MainPage extends JFrame {
 		}
 	}
 	
-	public void downloadSaleDetails (int productId, String productName, int quantity, double amount) {
+	public static void downloadSaleDetails (int productId, String productName, int quantity, double amount) {
 		conn = DbConnection.ConnectDB();
 
 		String query = "INSERT INTO SaleDetails(ProductId, ProductName, Quantity, Amount) VALUES (?,?,?,?)";
@@ -235,7 +280,7 @@ public class MainPage extends JFrame {
 		}
 	}
 	
-	public void insertSale(int receiptCount, double totalAmount, double cashPayment, double creditPayment) {
+	public static void insertSale(int receiptCount, double totalAmount, double cashPayment, double creditPayment) {
 		conn = DbConnection.ConnectDB();
 
 		String query = "INSERT INTO Sale(ReceiptCount, TotalAmount, CashPayment, CreditPayment) VALUES (?,?,?,?)";
@@ -256,7 +301,7 @@ public class MainPage extends JFrame {
 		}
 	}
 	
-	public void uploadSale(int receiptCount, double totalAmount, double cashPayment, double creditPayment) {
+	public static void uploadSale(int receiptCount, double totalAmount, double cashPayment, double creditPayment) {
 		conn = DbConnection.ConnectDB();
 		
 		String query = "UPDATE Sale SET "	
@@ -278,7 +323,7 @@ public class MainPage extends JFrame {
 		}
 	}
 	
-	public void closeDB() {	
+	public static void closeDB() {	
 		try {
 			//close DB
 			pst.close();	// PreparedStatement closed
