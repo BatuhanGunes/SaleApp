@@ -13,7 +13,7 @@ The client application gets the required connection values for the server applic
 
 ### Database Tables
 
-<img align="center" width="220" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/tableProduct.png"> <img align="center" width="220" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/tableSale.png"> <img align="center" width="220" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/tableSaleDetails.png">
+<img align="center" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/tableProduct.png"> <img align="center" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/tableSale.png"> <img align="center" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/tableSaleDetails.png">
 
 ## Flow diagram
 
@@ -51,9 +51,11 @@ git clone https://github.com/BatuhanGunes/SaleApp
 ```
 
 Open the Client source code in the Java IDE. To do this, open the Java IDE and follow the path `SaleApp/ProductProgramming/`.
-<https://github.com/BatuhanGunes/SaleApp/blob/master/images/build8.png" />
+
+<img src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/build8.png" />
 
 Open the Client source code in Android Studio. To do this, open Android Studio and follow the path `SaleApp/SaleClient/`.
+
 <img src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/build1.png" />
 
 ### Step 2. Build the Java Application project
@@ -79,9 +81,9 @@ Connect the Android device to the computer and be sure to approve any ADB permis
 
 <img src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/build5.png" style="width: 70%" />
 
-<img src="" style="widthhttps://github.com/BatuhanGunes/SaleApp/blob/master/images/build6.png: 40%" />
+<img src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/build6.png" style="width: 40%" />
 
-<img src="" style= https://github.com/BatuhanGunes/SaleApp/blob/master/images/build7.png"width: 80%" />
+<img src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/build7.png" style="width: 80%" />
 
 To test the app, open the app called `SaleClient` on your device. Re-installing the app may require you to uninstall the previous installations.
 
