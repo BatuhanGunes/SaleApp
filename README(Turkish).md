@@ -13,9 +13,7 @@ Sunucu uygulaması, istemci uygulamasında kullanılacak ürünlerin oluşturulm
 
 ### Verilerin Kaydedildiği Tablolar
 
-<img align="center" width="220" height="350" src="">
-<img align="center" width="220" height="350" src="">
-<img align="center" width="220" height="350" src="">
+<img align="center" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/tableProduct.png"> <img align="center" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/tableSale.png"> <img align="center" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/tableSaleDetails.png">
 
 ## Akış Diyagramı
 
@@ -59,19 +57,19 @@ git clone https://github.com/BatuhanGunes/SaleApp
 
 Java IDE'de İstemci kaynak kodunu açın. Bunu yapmak için Java IDE'i açın ve `SaleApp/ProductProgramming/` yolunu izleyin.
 
-<img src="" />
+<img src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/build8.png" />
 
 Android Studio'da İstemci kaynak kodunu açın. Bunu yapmak için Android Studio'yu açın ve `SaleApp/SaleClient/` yolunu izleyin.
 
-<img src="" />
+<img src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/build1.png" />
 
 ### Adım 2. Java Uygulaması projesini oluşturma
 
 Proje dosyasını çalışma alanınıza kaydettikten sonra, projenin üzerine sağ tıklayarak `Run As -> Maven Build` yolunu izleyin. Açılan pencere içerisindeki 'Goal' alanına `clean verify` etiketini girin. Ardından `Run` seçeneği ile çalıştırın. Gerekli yapılandırmaları yaptıktan sonra `pom.xml` dosyası eksik olan kütüphaneleri otomatik olarak indirir.
 
-<img src="" />
+<img src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/build9.png" />
 
-<img src="" />
+<img src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/build10.png" />
 
 ### Step 3. Java Uygulamasını yükleme ve çalıştırma
 `Run -> Run` yolunu izlemeniz yeterli olacaktır. 
@@ -80,21 +78,21 @@ Proje dosyasını çalışma alanınıza kaydettikten sonra, projenin üzerine s
 
 `Build -> Make Project` ı seçin ve projenin başarıyla oluşturulduğunu kontrol edin. Android SDK sürümünü projenin ayarlarını yapılandırarak elde etmeniz gerekecek. Gerekli yapılandırmaları yaptıktan sonra `build.gradle` dosyası eksik olan kütüphaneleri indirmenizi ister.
 
-<img src="" style="width: 40%" />
+<img src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/build2.png" style="width: 40%" />
 
-<img src="" style="width: 60%" />
+<img src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/build3.png" style="width: 60%" />
 
 ### Step 5. Android Uygulamasını yükleme ve çalıştırma
 
 Android cihazı bilgisayara bağlayın ve telefonunuzda görünen ADB izin istemlerini onayladığınızdan emin olun. `Run -> Run app.` seçin. Bağlı cihazlarda uygulamanın yükleneceği cihaza dağıtım hedefini seçin. Bu, uygulamayı cihaza yükleyecektir. Uygulamanın doğru çalışması için iki uygulamanında aynı anda açık olması gerekmektedir.
 
-<img src="" style="width: 60%" />
+<img src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/build4.png" style="width: 60%" />
 
-<img src="" style="width: 70%" />
+<img src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/build5.png" style="width: 70%" />
 
-<img src="" style="width: 40%" />
+<img src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/build6.png" style="width: 40%" />
 
-<img src="" style="width: 80%" />
+<img src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/build7.png" style="width: 80%" />
 
 Uygulamayı test etmek için Android cihazınızda `SaleClient` adlı uygulamayı açın. Uygulamanın yeniden yüklenmesi, önceki yüklemelerin kaldırılmasını gerektirebilir.
 
