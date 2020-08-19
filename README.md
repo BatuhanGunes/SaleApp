@@ -18,11 +18,11 @@ The client application gets the required connection values for the server applic
 ## Screenshots
 ### Client App
 
-<img align="center" width="200" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client1.jpeg">  <img align="center" width="200" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client5.jpeg"> <img align="center" width="200" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client2.jpeg">  <img align="center" width="200" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client3.jpeg"> <img align="center" width="200" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client4.jpeg">
+<img align="center" width="180" height="320" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client1.jpeg">  <img align="center" width="180" height="320" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client5.jpeg"> <img align="center" width="180" height="320" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client2.jpeg">  <img align="center" width="180" height="320" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client3.jpeg"> <img align="center" width="180" height="320" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client4.jpeg">
 
 ### Server App
 
-<img align="center" width="440" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Server1.png">  <img align="center" width="440" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Server2.png"> <img align="center" width="440" height="350" src="">  <img align="center" width="440" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Server3.png"> <img align="center" width="440" height="350" src="">  <img align="center" width="440" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Server4.png"> 
+<img align="center" width="440" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Server1.png"> <img align="center" width="440" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Server2.png"> <img align="center" width="440" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Server3.png"> <img align="center" width="440" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Server4.png"> 
 
 ## Getting Started
 
