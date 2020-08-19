@@ -57,6 +57,10 @@ Open the Client source code in Android Studio. To do this, open Android Studio a
 ### Step 2. Build the Java Application project
 After saving the project file in your workspace, right click on the project and follow the path `Run As -> Maven Build`. Enter the `clean verify` label in the `Goal` field in the window that opens. Then run it with the `Run` option. After making the necessary configurations, the `pom.xml` file will automatically download the missing libraries.
 
+<img src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/build9.png" />
+
+<img src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/build10.png" />
+
 ### Step 3. Install and run the Java app
 
 It will be sufficient to follow the path `Run -> Run`.
