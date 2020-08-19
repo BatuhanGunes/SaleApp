@@ -1,10 +1,7 @@
 package com.example.saleclient;
 
-import android.content.Context;
 import android.os.Handler;
-import android.os.Message;
-import android.widget.Toast;
-
+import android.util.Log;
 import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
@@ -19,11 +16,7 @@ public class ServerThread implements Runnable {
     InputStreamReader inputStreamReader;
     BufferedReader bufferedReader;
     Handler handler = new Handler();
-    Context context;
-    public static String jsonProduct = "{'products':[" +
-            "{'ProductName':'Test1','UnitPrice':1.11, 'VatRate':0}," +
-            "{'ProductName':'Test2','UnitPrice':22.0, 'VatRate':8}," +
-            "{'ProductName':'Test3','UnitPrice':12.0, 'VatRate':1}]}";
+    public static String incomingMessage;
 
     @Override
     public void run() {
@@ -33,12 +26,12 @@ public class ServerThread implements Runnable {
                 socket = serverSocket.accept();
                 inputStreamReader = new InputStreamReader(socket.getInputStream());
                 bufferedReader = new BufferedReader(inputStreamReader);
-                jsonProduct = bufferedReader.readLine();
+                incomingMessage = bufferedReader.readLine();
 
                 handler.post(new Runnable() {
                     @Override
                     public void run() {
-                        Toast.makeText(context, "Ürünler indirildi.", Toast.LENGTH_SHORT).show();
+                        Log.e("Incoming Message", "\"" + incomingMessage + "\"");
                     }
                 });
             }

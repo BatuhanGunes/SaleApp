@@ -13,9 +13,8 @@ import javax.swing.border.EmptyBorder;
 
 import com.google.gson.Gson;
 import com.google.gson.GsonBuilder;
+import com.google.gson.reflect.TypeToken;
 
-import Gui.Reporting.Product;
-import Gui.Reporting.Products;
 import Model.DbConnection;
 
 import javax.swing.JButton;
@@ -24,14 +23,18 @@ import java.io.BufferedReader;
 import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.PrintWriter;
+import java.net.InetAddress;
 import java.net.ServerSocket;
 import java.net.Socket;
+import java.net.UnknownHostException;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
+import java.util.Map;
 import java.awt.event.ActionEvent;
+import javax.swing.JTextField;
 
 public class MainPage extends JFrame {
 
@@ -52,7 +55,8 @@ public class MainPage extends JFrame {
 	static String message;
 	static String jsonMsg;
 	static int portAddress = 7800;
-	static String ipAddress = "10.0.2.16";
+	static String ipAddress = "192.168.2.2";
+	private JTextField textFieldClientIp;
 	
 	/**
 	 * Launch the application.
@@ -68,7 +72,7 @@ public class MainPage extends JFrame {
 				}
 			}
 		});
-		
+
 		try {
 			serverSocket = new ServerSocket(portAddress);
 			while(true) {
@@ -76,7 +80,7 @@ public class MainPage extends JFrame {
 				inputStreamReader = new InputStreamReader(socket.getInputStream());
 				bufferedReader = new BufferedReader(inputStreamReader);
 				message = bufferedReader.readLine();
-				System.out.println(message);
+				System.out.println("Message : " + message);
 				
 				String[] msg = message.split("-");
 				String massegeType = msg[0];
@@ -162,39 +166,67 @@ public class MainPage extends JFrame {
 		btnExit.setBounds(150, 220, 150, 23);
 		contentPane.add(btnExit);
 		
-		JLabel lblIpAddressTitle = new JLabel("Bağlanılan Ip:");
+		JLabel lblIpAddressTitle = new JLabel("Server Ip:");
 		lblIpAddressTitle.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblIpAddressTitle.setBounds(10, 260, 130, 25);
 		contentPane.add(lblIpAddressTitle);
 		
-		JLabel lblConnectPortTitle = new JLabel("Bağlanılan Port:");
+		JLabel lblConnectPortTitle = new JLabel("Server Port:");
 		lblConnectPortTitle.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblConnectPortTitle.setBounds(10, 280, 130, 25);
 		contentPane.add(lblConnectPortTitle);
 		
-		JLabel lblUsedPortTitle = new JLabel("Kullanılan Port:");
+		JLabel lblUsedPortTitle = new JLabel("Client Port:");
 		lblUsedPortTitle.setFont(new Font("Tahoma", Font.BOLD, 15));
 		lblUsedPortTitle.setBounds(10, 300, 130, 25);
 		contentPane.add(lblUsedPortTitle);
 		
 		JLabel lblIpAddress = new JLabel("");
 		lblIpAddress.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblIpAddress.setBounds(150, 260, 228, 25);
+		lblIpAddress.setBounds(150, 260, 109, 25);
 		contentPane.add(lblIpAddress);
-		lblIpAddress.setText(ipAddress);
+		
+		try {
+			InetAddress myIP;
+			myIP = InetAddress.getLocalHost();
+			lblIpAddress.setText(myIP.getHostAddress());
+		} catch (UnknownHostException e1) {
+			// TODO Auto-generated catch block
+			e1.printStackTrace();
+		}
 		
 		JLabel lblConnectPort = new JLabel("");
 		lblConnectPort.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblConnectPort.setBounds(150, 280, 228, 25);
+		lblConnectPort.setBounds(150, 280, 86, 25);
 		contentPane.add(lblConnectPort);
 		lblConnectPort.setText(String.valueOf(portAddress+1));
 		
-		
 		JLabel lblUsedPort = new JLabel("");
 		lblUsedPort.setFont(new Font("Tahoma", Font.PLAIN, 15));
-		lblUsedPort.setBounds(150, 300, 228, 25);
+		lblUsedPort.setBounds(150, 300, 118, 25);
 		contentPane.add(lblUsedPort);
 		lblUsedPort.setText(String.valueOf(portAddress));
+		
+		textFieldClientIp = new JTextField();
+		textFieldClientIp.setText("192.168.2.2");
+		textFieldClientIp.setBounds(290, 284, 86, 20);
+		contentPane.add(textFieldClientIp);
+		textFieldClientIp.setColumns(10);
+		
+		JButton btnClientChangeIp = new JButton("ip Değiştir");
+		btnClientChangeIp.addActionListener(new ActionListener() {
+			public void actionPerformed(ActionEvent e) {
+				ipAddress = textFieldClientIp.getText().toString();
+				JOptionPane.showMessageDialog(null, "Client ip değiştirildi.");
+			}
+		});
+		btnClientChangeIp.setBounds(278, 316, 109, 23);
+		contentPane.add(btnClientChangeIp);
+		
+		JLabel lblClientIp = new JLabel("Client ip:");
+		lblClientIp.setFont(new Font("Tahoma", Font.BOLD, 15));
+		lblClientIp.setBounds(294, 254, 130, 25);
+		contentPane.add(lblClientIp);
 	}
 	
 	public static void chooseMessageType(String msgType) {
@@ -207,22 +239,38 @@ public class MainPage extends JFrame {
 		case "saleDetails":{
 			// Download the saleDetails data from the client.
 			try {
-                downloadSaleDetails(Integer.parseInt(jsonMsg.substring(0)), Double.parseDouble(jsonMsg.substring(1)), 
-    					Double.parseDouble(jsonMsg.substring(2)), Double.parseDouble(jsonMsg.substring(3)));
-            } catch (Throwable e) {
-            	JOptionPane.showMessageDialog(null, e);	
-            }
-			
+				Gson gson = new Gson();
+				Map<String, String> map = gson.fromJson(jsonMsg, new TypeToken<Map<String, String>>() {}.getType());
+
+				String productName = map.get("productName");
+				int totalQuantity = Integer.parseInt(map.get("totalQuantity"));
+					        
+				downloadSaleDetails(productName, totalQuantity);
+				System.out.println("Save in sales 'sales detail' table");
+			} catch (Throwable e) {
+				JOptionPane.showMessageDialog(null, e);	
+			}
 			break;
 		}
-		case "Deneme1":{
-			// Save sale data from client in database
-			insertSale(1,1,1,1);
+		case "sale":{
+			try {
+				// Download the sale data from the client.
+				Gson gson = new Gson();
+				Map<String, String> map = gson.fromJson(jsonMsg, new TypeToken<Map<String, String>>() {}.getType());
+				
+				int receiptCount = Integer.parseInt(map.get("receiptCount"));
+				double cashPayment = Double.parseDouble(map.get("cashPayment"));
+				double creditPayment = Double.parseDouble(map.get("creditPayment"));
+				
+				saveSale(receiptCount, cashPayment, creditPayment);
+				System.out.println("Save in sales 'sale' table");
+			}catch (Exception e) {
+				JOptionPane.showMessageDialog(null, e);	
+			}
 			break;
 		}
-		case "Deneme2":{
-			// Save sale data from client in database
-			uploadSale(10,10,10,10);
+		case "connectionTest":{
+			connectionTest();
 			break;
 		}
 		default:
@@ -274,7 +322,6 @@ public class MainPage extends JFrame {
 				// Creates the JSON format.
 				Gson gson = new GsonBuilder().create();
 				String json = gson.toJson(productsToConvert);
-				System.out.print(json);
 				
 				try {
 					socket = new Socket(ipAddress, (portAddress+1));
@@ -283,9 +330,45 @@ public class MainPage extends JFrame {
 					printWriter.flush();
 					printWriter.close();
 					socket.close();
+					System.out.println("products sent message : " + json);
 				}catch (IOException e) {
 					// handle exception
-					e.printStackTrace();
+					JOptionPane.showMessageDialog(null, e);	
+				}
+			}
+		} catch (Exception e) {
+			// handle exception
+			JOptionPane.showMessageDialog(null, e);	
+		}
+		closeDB();
+	}
+
+	public static void downloadSaleDetails(String productName, int totalQuantity) {
+		conn = DbConnection.ConnectDB();
+		String query = "SELECT Id,UnitPrice FROM Products WHERE ProductName='" + productName + "'";
+		
+		try {
+			pst = conn.prepareStatement(query);
+			rs = pst.executeQuery();
+			
+			//Checks if there is an active recording.
+			if(rs.isClosed()) {
+				JOptionPane.showMessageDialog(null, "Kayıt Bulunamadı. Lütfen Tekrar Deneyiniz.");
+				return;
+			}else {		
+
+				String querySaleDetails = "INSERT INTO SaleDetails(ProductId, ProductName, Amount) VALUES (?,?,?)";
+				try {
+					double Amount = totalQuantity * Double.parseDouble(rs.getString("UnitPrice"));
+					
+					pst = conn.prepareStatement(querySaleDetails);
+					pst.setInt(1, Integer.parseInt(rs.getString("Id")));
+					pst.setString(2, productName);
+					pst.setDouble(3, Amount);
+					pst.execute();
+				}catch (Exception e) {
+					// handle exception
+					JOptionPane.showMessageDialog(null, e);	
 				}
 			}
 			closeDB();
@@ -295,65 +378,35 @@ public class MainPage extends JFrame {
 		}
 	}
 	
-	public static void downloadSaleDetails (int receiptCount, double totalAmount, double cashPayment, double creditPayment) {
+	private static void saveSale(int receiptCount, double cashPayment, double creditPayment) {
 		conn = DbConnection.ConnectDB();
-
-		String query = "INSERT INTO Sale(ReceiptCount, TotalAmount, CashPayment, CreditPayment) VALUES (?,?,?,?)";
 		
+		String query = "INSERT INTO Sale(ReceiptCount, TotalAmount, CashPayment, CreditPayment) VALUES (?,?,?,?)";
 		try {
 			pst = conn.prepareStatement(query);
 			pst.setInt(1, receiptCount);
-			pst.setDouble(2, totalAmount);
+			pst.setDouble(2, (cashPayment + creditPayment)); // TotalAmount = CashPayment + CreditPaymente
 			pst.setDouble(3, cashPayment);
 			pst.setDouble(4, creditPayment);
 			pst.execute();
 
 			closeDB();
-			JOptionPane.showMessageDialog(null, "Satış detayları Eklendi.");
-		}catch (Exception e) {
+		}catch (Exception e1) {
 			// handle exception
-			JOptionPane.showMessageDialog(null, e);	
+			JOptionPane.showMessageDialog(null, e1);	
 		}
 	}
 	
-	public static void insertSale(int receiptCount, double totalAmount, double cashPayment, double creditPayment) {
-		conn = DbConnection.ConnectDB();
-
-		String query = "INSERT INTO Sale(ReceiptCount, TotalAmount, CashPayment, CreditPayment) VALUES (?,?,?,?)";
-		
+	public static void connectionTest() {
 		try {
-			pst = conn.prepareStatement(query);
-			pst.setInt(1, receiptCount);
-			pst.setDouble(2, totalAmount);
-			pst.setDouble(3, cashPayment);
-			pst.setDouble(4, creditPayment);
-			pst.execute();
-
-			closeDB();
-			JOptionPane.showMessageDialog(null, "Satış Eklendi.");
-		}catch (Exception e) {
-			// handle exception
-			JOptionPane.showMessageDialog(null, e);	
-		}
-	}
-	
-	public static void uploadSale(int receiptCount, double totalAmount, double cashPayment, double creditPayment) {
-		conn = DbConnection.ConnectDB();
-		
-		String query = "UPDATE Sale SET "	
-				+ "ReceiptCount=" + receiptCount + ", "
-				+ "TotalAmount='" + totalAmount +"', "
-				+ "CashPayment=" + cashPayment + ", "
-				+ "CreditPayment=" + creditPayment 
-				+ " WHERE Id=(SELECT max(Id) FROM Sale)";
-		
-		try {
-			pst = conn.prepareStatement(query);
-			pst.executeUpdate();
-			
-			closeDB();
-			JOptionPane.showMessageDialog(null, "Satış güncelleştirildi.");
-		} catch (Exception e) {
+			socket = new Socket(ipAddress, (portAddress+1));
+			printWriter = new PrintWriter(socket.getOutputStream());
+			printWriter.write("ConnectionSuccess");
+			printWriter.flush();
+			printWriter.close();
+			socket.close();
+			System.out.println("sent message : ConnectionSuccess");
+		}catch (IOException e) {
 			// handle exception
 			JOptionPane.showMessageDialog(null, e);	
 		}

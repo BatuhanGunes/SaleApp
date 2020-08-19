@@ -1,9 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="ChangeListManager">
-    <list default="true" id="08056600-4bcd-44f4-9a11-f6e055b0c3c2" name="Default Changelist" comment="">
-      <change beforePath="$PROJECT_DIR$/ProductProgramming/Products.db" beforeDir="false" afterPath="$PROJECT_DIR$/ProductProgramming/Products.db" afterDir="false" />
-    </list>
+    <list default="true" id="08056600-4bcd-44f4-9a11-f6e055b0c3c2" name="Default Changelist" comment="" />
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
     <option name="HIGHLIGHT_NON_ACTIVE_CHANGELIST" value="false" />
@@ -45,9 +43,13 @@
     <servers />
   </component>
   <component name="WindowStateProjectService">
-    <state x="463" y="119" key="FileChooserDialogImpl" timestamp="1597557207708">
+    <state x="137" y="19" key="#com.intellij.execution.impl.EditConfigurationsDialog" timestamp="1597696541744">
       <screen x="0" y="0" width="1366" height="728" />
     </state>
-    <state x="463" y="119" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1597557207708" />
+    <state x="137" y="19" key="#com.intellij.execution.impl.EditConfigurationsDialog/0.0.1366.728@0.0.1366.728" timestamp="1597696541744" />
+    <state x="463" y="119" key="FileChooserDialogImpl" timestamp="1597696556520">
+      <screen x="0" y="0" width="1366" height="728" />
+    </state>
+    <state x="463" y="119" key="FileChooserDialogImpl/0.0.1366.728@0.0.1366.728" timestamp="1597696556520" />
   </component>
 </project>

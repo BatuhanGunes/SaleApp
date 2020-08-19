@@ -2,12 +2,9 @@ package com.example.saleclient;
 
 import android.app.Activity;
 import android.content.Context;
-import android.icu.number.Precision;
-import android.view.Gravity;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
-import android.widget.CheckBox;
 import android.widget.LinearLayout;
 import android.widget.TextView;
 import android.widget.Toast;
@@ -16,14 +13,14 @@ import androidx.annotation.NonNull;
 import androidx.recyclerview.widget.RecyclerView;
 
 import java.math.BigDecimal;
-import java.math.MathContext;
 import java.util.ArrayList;
 
 public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHolder> {
 
     ArrayList<Product> productArrayList;
-    ArrayList<String> productNameArrayList;
-    ArrayList<Double> productPriceArrayList;
+    ArrayList<String> productNameArrayList = new ArrayList<>();
+    ArrayList<Double> productPriceArrayList = new ArrayList<>();
+    ArrayList<Integer> totalQuantityArrayList = new ArrayList<>();
     LayoutInflater layoutInflater;
     Context context;
     TextView textViewTotalAmount;
@@ -63,11 +60,25 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 String productName = productArrayList.get(position).getProductName();
                 double productPrice = productArrayList.get(position).getProductPrice();
 
-                productNameArrayList = new ArrayList<>();
-                productNameArrayList.add(productName);
+                // checks if there is the same value
+                boolean setFlag = false;
+                int setIndex = 0;
+                for (int i = 0; i < productNameArrayList.size(); i++) {
+                    if (productNameArrayList.get(i) == productName) {
+                        setFlag = true;
+                        setIndex = i;
+                    }
+                }
 
-                productPriceArrayList = new ArrayList<>();
-                productPriceArrayList.add(productPrice);
+                // If there is no same value, it adds new data. If available, it updates the existing data.
+                if(setFlag == false){
+                    productNameArrayList.add(productName);
+                    productPriceArrayList.add(productPrice);
+                    totalQuantityArrayList.add(1);
+                }else {
+                    productPriceArrayList.set(setIndex, (productPrice * 2));
+                    totalQuantityArrayList.set(setIndex, (totalQuantityArrayList.get(setIndex) + 1));
+                }
 
                 shoppingCartTotalAmount += productPrice;
                 roundTotalAmount = new BigDecimal(shoppingCartTotalAmount).setScale(
@@ -80,6 +91,10 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
                 toast.show();
             }
         });
+    }
+
+    public ArrayList<Integer> getTotalQuantityArrayList() {
+        return totalQuantityArrayList;
     }
 
     @Override
@@ -97,7 +112,6 @@ public class ProductAdapter extends RecyclerView.Adapter<ProductAdapter.ViewHold
             linearLayout = itemView.findViewById(R.id.layout);
             textViewProductName = itemView.findViewById(R.id.textViewProductName);
             textViewProductPrice = itemView.findViewById(R.id.textViewProductPrice);
-            textViewPriceTitle = itemView.findViewById(R.id.textViewPriceTitle);
             textViewPriceType = itemView.findViewById(R.id.textViewPriceType);
         }
     }

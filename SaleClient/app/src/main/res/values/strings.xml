@@ -15,5 +15,7 @@
     <string name="PORT">PORT :</string>
     <string name="Synchronize">Senkronize Et</string>
     <string name="PortAdress">7800</string>
-    <string name="ipAddress">192.168.</string>
+    <string name="ipAddress">192.168.2.3</string>
+    <string name="productName">Ürün ismi</string>
+    <string name="priceUnit">TL</string>
 </resources>
