@@ -15,18 +15,14 @@ The client application gets the required connection values for the server applic
 
 <img align="center" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/tableProduct.png"> <img align="center" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/tableSale.png"> <img align="center" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/tableSaleDetails.png">
 
-## Flow diagram
-
-<img align="center" src=""> 
-
 ## Screenshots
 ### Client App
 
-<img align="center" width="220" height="350" src="">  <img align="center" width="220" height="350" src=""> <img align="center" width="220" height="350" src="">  <img align="center" width="220" height="350" src="">
+<img align="center" width="200" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client1.jpeg">  <img align="center" width="200" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client5.jpeg"> <img align="center" width="200" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client2.jpeg">  <img align="center" width="200" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client3.jpeg"> <img align="center" width="200" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client4.jpeg">
 
 ### Server App
 
-<img align="center" width="220" height="350" src="">  <img align="center" width="220" height="350" src=""> <img align="center" width="220" height="350" src="">  <img align="center" width="220" height="350" src="">
+<img align="center" width="440" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Server1.png">  <img align="center" width="440" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Server2.png"> <img align="center" width="440" height="350" src="">  <img align="center" width="440" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Server3.png"> <img align="center" width="440" height="350" src="">  <img align="center" width="440" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Server4.png"> 
 
 ## Getting Started
 
