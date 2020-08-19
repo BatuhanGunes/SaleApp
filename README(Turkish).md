@@ -15,19 +15,15 @@ Sunucu uygulaması, istemci uygulamasında kullanılacak ürünlerin oluşturulm
 
 <img align="center" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/tableProduct.png"> <img align="center" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/tableSale.png"> <img align="center" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/tableSaleDetails.png">
 
-## Akış Diyagramı
-
-<img align="center" width="220" height="350" src="">
-
 ## Ekran Görüntüleri
 ### Sunucu Uygulaması
 
-<img align="center" width="220" height="350" src="">  <img align="center" width="220" height="350" src=""> <img align="center" width="220" height="350" src="">  <img align="center" width="220" height="350" src="">
+<img align="center" width="160" height="320" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client1.jpeg">  <img align="center" width="160" height="320" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client5.jpeg"> <img align="center" width="160" height="320" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client2.jpeg">  <img align="center" width="160" height="320" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client3.jpeg"> <img align="center" width="160" height="320" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Client4.jpeg">
+
 
 ### İstemci Uygulaması
 
-<img align="center" width="220" height="350" src="">  <img align="center" width="220" height="350" src=""> <img align="center" width="220" height="350" src="">  <img align="center" width="220" height="350" src="">
-
+<img align="center" width="380" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Server1.png"> <img align="center" width="380" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Server2.png"> <img align="center" width="380" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Server3.png"> <img align="center" width="380" height="350" src="https://github.com/BatuhanGunes/SaleApp/blob/master/images/Server4.png"> 
 ## Başlangıç
 
 Projeyi çalıştırabilmek için proje dosyalarının bir kopyasını yerel makinenize indirin. Gerekli ortamları edindikten sonra projeyi bu ortamda açarak çalıştırabilirsiniz. İstemci uygulamasını android bir cihaz üzerinde de çalıştırabilirsiniz.
