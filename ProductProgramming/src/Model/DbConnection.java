@@ -41,7 +41,6 @@ public class DbConnection {
 			String tableSalesDetails = "CREATE TABLE IF NOT EXISTS SaleDetails (\n"
 	                + "	ProductId INTEGER NOT NULL,\n"
 	                + "	ProductName TEXT NOT NULL,\n"
-	                + "	Quantity INTEGER NOT NULL,\n"
 	                + "	Amount REAL NOT NULL\n"
 	                + ");";
 
